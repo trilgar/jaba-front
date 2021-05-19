@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+<div class="container-md">
+  <div class="row">
+
+    <div class="col-md-offset-3 col-md-6">
+      <form class="form-horizontal" [formGroup]="registerForm">
+        <span class="heading">Примкни к жабам прямо сейчас</span>
+        <div class="form-group" >
+          <div class="has-error" *ngIf="errorFlag">{{errorMessage}}</div>
+          <input type="email" class="form-control" id="inputEmail" placeholder="E-mail" formControlName="email"
+                 [ngClass]="{'has-error': registerForm.get('email').errors && (registerForm.get('email').dirty || registerForm.get('email').touched)}" >
+          <i class="fa fa-email"></i>
+          <span *ngIf="registerForm.get('email').errors && registerForm.get('email').touched">
+            Введи нормальное мыло
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="inputUsername" placeholder="Username" formControlName="username"
+                 [ngClass]="{'has-error': registerForm.get('username').errors && (registerForm.get('username').dirty || registerForm.get('username').touched)}">
+          <i class="fa fa-user"></i>
+          <span *ngIf="registerForm.get('username').errors && registerForm.get('username').touched">
+            Ник должен быть от 4 до 10 символов
+          </span>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="inputPassword" placeholder="Password" formControlName="password"
+                 [ngClass]="{'has-error': registerForm.get('password').errors && (registerForm.get('password').dirty || registerForm.get('password').touched)}">
+          <i class="fa fa-lock"></i>
+          <span *ngIf="registerForm.get('password').errors && registerForm.get('password').touched">
+            Пароль должен содержать цифры,буквы и быть минимум 8-символьным.
+          </span>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-success hover-shine align-content-center" [disabled]="!registerForm.valid" (click)="onSubmit()">РЕГИСТРАЦИЯ</button>
+        </div>
+      </form>
+    </div>
+
+  </div><!-- /.row -->
+</div><!-- /.container -->
