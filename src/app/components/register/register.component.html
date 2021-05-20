@@ -8,7 +8,7 @@
       <form class="form-horizontal" [formGroup]="registerForm">
         <span class="heading">Примкни к жэбам прямо сейчас</span>
         <div class="form-group" >
-          <div class="has-error" *ngIf="errorFlag">{{errorMessage}}</div>
+          <div class="text-danger" *ngIf="errorFlag">{{errorMessage}}</div>
           <input type="email" class="form-control" id="inputEmail" placeholder="E-mail" formControlName="email"
                  [ngClass]="{'has-error': registerForm.get('email').errors && (registerForm.get('email').dirty || registerForm.get('email').touched)}" >
           <i class="fa fa-email"></i>

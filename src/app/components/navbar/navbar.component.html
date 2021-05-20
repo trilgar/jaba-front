@@ -1,0 +1,29 @@
+<nav class=" bg-green fixed-top">
+  <div class="row">
+    <div class="col ">
+      <form class="form-inline searchbar">
+        <input class="form-control ml-2 p-0" type="search" placeholder="  поиск..." aria-label="Search">
+      </form>
+    </div>
+    <div class="col">
+      <h2 class="text-center">Ферма Нейрожэб</h2>
+    </div>
+    <div class="col">
+      <div class="row mt-2">
+        <div class="col"></div>
+        <div class="col">
+          <div class="row" *ngIf="money>0">
+            <div class="col-4 navbar-jaby-link">
+              Мои жэбы
+            </div>
+            <div class=" col-4 mr-2">
+              Money: {{money}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</nav>
