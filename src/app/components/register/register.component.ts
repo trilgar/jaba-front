@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, ValidationErrors, Validators} from '@angular/forms';
-import {AuthService, RegisterDto} from "../../services/auth/auth.service";
-import {take} from "rxjs/operators";
-import {Router} from "@angular/router";
+import {AuthService, RegisterDto} from '../../services/auth/auth.service';
+import {take} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -64,8 +64,28 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/login']);
       }, error => {
         console.log('error during registration occurred');
-        this.errorMessage = error.error.message;
-        this.errorFlag = true;
+        console.log(error);
+        let unexpected = true;
+        if (error.error.message.password != null) {
+          this.errorMessage = error.error.message.password;
+          this.errorFlag = true;
+          unexpected = false;
+        }
+        if (error.error.message.email != null) {
+          this.errorMessage += error.error.message.email;
+          this.errorFlag = true;
+          unexpected = false;
+        }
+        if (error.status === 500) {
+          this.errorMessage = 'unexpected error. please,contact administrator.';
+          this.errorFlag = true;
+          return;
+        }
+        if (unexpected === true) {
+          this.errorMessage = error.error.message;
+          this.errorFlag = true;
+        }
+
       });
   }
 }
