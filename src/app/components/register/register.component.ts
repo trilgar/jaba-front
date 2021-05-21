@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
     /** Проверка на содержание прописных букв */
     const hasLowercaseLetter = /[a-z]/.test(value);
     /** Проверка на минимальную длину пароля */
-    const isLengthValid = value ? value.length > 8 : false;
+    const isLengthValid = value ? value.length >= 8 : false;
 
     /** Общая проверка */
     const passwordValid = hasNumber && (hasCapitalLetter || hasLowercaseLetter) && isLengthValid;

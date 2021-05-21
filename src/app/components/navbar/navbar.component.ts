@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user/user.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -9,11 +10,21 @@ import {UserService} from '../../services/user/user.service';
 export class NavbarComponent implements OnInit {
   money = -1;
 
-  constructor(private userservice: UserService) {
+  constructor(private userService: UserService, private router: Router) {
+
   }
 
   ngOnInit(): void {
-    this.userservice.currentMessage.subscribe(currentMoney => this.money = currentMoney);
+    this.money = this.getCurrentMoney();
+    console.log('money: ', localStorage.getItem('money'));
+    this.userService.currentMessage.subscribe(moneyChange => this.money = this.getCurrentMoney());
   }
 
+  getCurrentMoney(): number {
+    return parseInt(localStorage.getItem('money'), 10);
+  }
+
+  goToFrogs(): void {
+    this.router.navigate(['dashboard']);
+  }
 }

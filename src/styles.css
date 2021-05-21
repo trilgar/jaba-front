@@ -46,3 +46,10 @@ body {
 .has-error{
   background: #ff4a4f !important;
 }
+
+.shine-text:hover {
+  color:  #ffbb00;
+  font-size: 15px;
+  transition-duration: 1s;
+  cursor: pointer;
+}
