@@ -1,0 +1,8 @@
+.searchbar {
+  margin-left: 20px !important;
+  max-height: 10px !important;
+  max-width: 20% !important;
+  margin-top: 15px !important;
+  margin-bottom: 5px !important;
+  border-radius: 0 !important;
+}

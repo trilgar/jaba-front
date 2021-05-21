@@ -1,23 +1,47 @@
-<div class="container-lg mt-5">
-  <div class="row p-3">
-    <div class="col-lg-4 ml-1 mr-1 bg-white jaba-image p-0" *ngFor="let jaba of jaby">
-      <div class="position-relative d-flex">
-        <img src="{{jaba.image}}" class="img-fluid rounded-3 ">
-        <div class="jaba-progress-bar">
-          <div class="progress ">
-            <div class="progress-bar" role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                 aria-valuemax="100"></div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-3 col-sm-6" *ngFor="let jaba of jaby">
+      <div class="box">
+        <img src="https://frog-farm-api.herokuapp.com/api/v1/images/1" alt="jaba-image">
+        <div class="box-content">
+          <h5 class="title">{{jaba.name}}</h5>
+          <h4 class="progress-title mr-1">Еда</h4>
+          <div class="progress orange">
+            <div class="progress-bar" style="{{calculateProgressStyle(jaba.food, '#ff6e2d')}}">
+            </div>
           </div>
-          <div class="progress">
-            <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                 aria-valuemax="100"></div>
+          <h4 class="progress-title mr-1">Чистота</h4>
+          <div class="progress blue">
+            <div class="progress-bar" style="{{calculateProgressStyle(jaba.cleanliness, '#6f86ff')}}">
+            </div>
           </div>
-          <div class="progress">
-            <div class="progress-bar  bg-success" role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                 aria-valuemax="100"></div>
+          <h4 class="progress-title mr-1">Деньги</h4>
+          <div class="progress yellow">
+            <div class="progress-bar" style="{{calculateProgressStyle(jaba.money, '#edff34')}}">
+            </div>
           </div>
         </div>
+        <ul class="icon">
+          <li><a (click)="feedFrog(jaba.id)" ><i class="fas fa-pizza-slice"></i></a></li>
+          <li><a (click)="washFrog(jaba.id)"><i class="fas fa-bath"></i></a></li>
+          <li><a (click)="collectMoney(jaba.id)"><i class="fas fa-wallet"></i></a></li>
+        </ul>
       </div>
     </div>
+    <div class="col-md-3 col-sm-6 cart-image">
+      <div class="box" (click)="goToShop()">
+        <img src="https://cdn0.iconfinder.com/data/icons/e-commerce-ui-glyph/64/ecommerce_-_basket_full-512.png"
+             alt="cart-image" class="img-fluid">
+        <div class="box-content">
+          <h2 class="title">Магаз</h2>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 </div>

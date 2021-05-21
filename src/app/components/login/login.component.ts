@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthDto, AuthService} from '../../services/auth/auth.service';
+import {AuthService} from '../../services/auth/auth.service';
 import {take} from 'rxjs/operators';
 import {UserService} from '../../services/user/user.service';
 import {FormBuilder, FormControl, ValidationErrors, Validators} from '@angular/forms';
@@ -36,10 +36,10 @@ export class LoginComponent implements OnInit {
     const password = this.registerForm.get('password').value;
     this.authService.authorise(username, password)
       .pipe(take(1)).subscribe(data => {
-      const userCredentials: AuthDto = data;
-      localStorage.setItem('username', username);
-      localStorage.setItem('password', password);
-      this.userService.changeMoney(userCredentials.money);
+      console.log('auth user:', data);
+      this.userService.changeMoney(data.money);
+      localStorage.setItem('userId', data.id.toString());
+      this.userService.userId = data.id;
       console.log('Auth success');
       this.router.navigate(['dashboard']);
     }, error => {
@@ -60,6 +60,7 @@ export class LoginComponent implements OnInit {
 
     });
   }
+
   private passwordValidator(control: FormControl): ValidationErrors {
     const value = control.value;
     /** Проверка на содержание цифр */
@@ -69,7 +70,7 @@ export class LoginComponent implements OnInit {
     /** Проверка на содержание прописных букв */
     const hasLowercaseLetter = /[a-z]/.test(value);
     /** Проверка на минимальную длину пароля */
-    const isLengthValid = value ? value.length > 8 : false;
+    const isLengthValid = value ? value.length >= 8 : false;
 
     /** Общая проверка */
     const passwordValid = hasNumber && (hasCapitalLetter || hasLowercaseLetter) && isLengthValid;

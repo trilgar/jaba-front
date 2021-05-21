@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col ">
       <form class="form-inline searchbar">
-        <input class="form-control ml-2 p-0" type="search" placeholder="  поиск..." aria-label="Search">
+        <input class="form-control" type="search" placeholder="  поиск..." aria-label="Search">
       </form>
     </div>
     <div class="col">
@@ -12,12 +12,12 @@
       <div class="row mt-2">
         <div class="col"></div>
         <div class="col">
-          <div class="row" *ngIf="money>0">
-            <div class="col-4 navbar-jaby-link">
+          <div class="row mt-4" *ngIf="money>0">
+            <div class="col-4 shine-text" (click)="goToFrogs()">
               Мои жэбы
             </div>
             <div class=" col-4 mr-2">
-              Money: {{money}}
+              <span class="text-warning">{{money}} <i class="fas fa-coins"></i></span>
             </div>
           </div>
         </div>

@@ -11,8 +11,8 @@ body {
 }
 
 .jaba-image {
-  width: 200px;
-  height: 200px;
+  width: 200px !important;
+  height: 200px !important;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 30px;
@@ -45,4 +45,11 @@ body {
 }
 .has-error{
   background: #ff4a4f !important;
+}
+
+.shine-text:hover {
+  color:  #ffbb00;
+  font-size: 15px;
+  transition-duration: 1s;
+  cursor: pointer;
 }
