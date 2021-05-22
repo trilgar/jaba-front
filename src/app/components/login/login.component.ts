@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
           break;
         }
         default: {
-          this.warningMessage = 'unexpected error';
+          this.warningMessage = error;
           this.warningFlag = true;
           break;
         }
