@@ -27,7 +27,7 @@
         <div class="form-group">
           <button type="submit" class="btn btn-success hover-shine align-content-center" [disabled]="!registerForm.valid" (click)="onSubmit()" >ВХОД</button>
         </div>
-        <a [routerLink]="['register']" class="align-content-start">нет учетной записи? зарегистрируйся!</a>
+        <a (click)="toRegister()" class="align-content-start cursor-pointer">нет учетной записи? зарегистрируйся!</a>
       </form>
     </div>
 

@@ -52,3 +52,7 @@ body {
   transition-duration: 1s;
   cursor: pointer;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
