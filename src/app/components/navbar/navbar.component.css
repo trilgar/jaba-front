@@ -6,3 +6,8 @@
   margin-bottom: 5px !important;
   border-radius: 0 !important;
 }
+
+.shine-white:hover {
+  color: #ff3907;
+  transition-duration: 1s;
+}

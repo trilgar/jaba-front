@@ -12,14 +12,17 @@ import {UserService} from '../../services/user/user.service';
   styleUrls: ['./main-page.component.css']
 })
 export class MainPageComponent implements OnInit {
-
+  warningMessage: string;
+  warningFlag = false;
   jaby: Frog[] = [];
 
 
-  constructor(private router: Router, private frogService: FrogService, private authService: AuthService, private userService: UserService) {
+  constructor(private router: Router, private frogService: FrogService,
+              private authService: AuthService, private userService: UserService) {
   }
 
   ngOnInit(): void {
+    this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.userService.changeMoney(user.money));
     this.refreshFrogs();
   }
 
@@ -74,5 +77,24 @@ export class MainPageComponent implements OnInit {
 
   findFrogById(id: number): Frog {
     return this.jaby.find(frog => frog.id === id);
+  }
+
+  buyNewFrog(): void {
+    this.frogService.buyFrog().pipe(take(1)).subscribe(newFrog => {
+      this.jaby.push(newFrog);
+      newFrog.image = this.getFullImageLink(newFrog.image);
+      console.log('new frog bought:', newFrog);
+      this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.userService.changeMoney(user.money));
+      const timeStamp = (new Date()).getTime();
+    }, error => {
+      console.log('error during jaba buying:', error);
+      this.warningMessage = error.error.message;
+      this.warningFlag = true;
+      setTimeout(() => this.warningFlag = false, 2500);
+    });
+  }
+
+  isFrogBuyAvailable(): boolean {
+    return this.userService.getCurrentMoney() >= 500;
   }
 }

@@ -13,11 +13,14 @@
         <div class="col"></div>
         <div class="col">
           <div class="row mt-4" *ngIf="money>0">
-            <div class="col-4 shine-text" (click)="goToFrogs()">
+            <div class="col-md-4  col-sm-6 shine-text" (click)="goToFrogs()">
               Мои жэбы
             </div>
-            <div class=" col-4 mr-2">
+            <div class=" col-md-3 col-sm-6">
               <span class="text-warning">{{money}} <i class="fas fa-coins"></i></span>
+            </div>
+            <div class=" col-md-3 col-sm-6 mr-2 shine-white" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
             </div>
           </div>
         </div>

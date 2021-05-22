@@ -37,6 +37,12 @@ export class FrogService {
     const url = `${environment.backendUrl}/api/v1/frogs/${id}`;
     return this.http.get<Frog>(url);
   }
+
+  buyFrog(): Observable<Frog> {
+    const url = `${environment.backendUrl}/api/v1/users/${parseInt(localStorage.getItem('userId'), 10)}/frogs`;
+    console.log('sending post to :', url);
+    return this.http.post<Frog>(url, null);
+  }
 }
 
 export class Frog {

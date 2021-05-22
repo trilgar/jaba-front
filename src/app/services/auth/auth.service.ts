@@ -1,14 +1,15 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {Router} from '@angular/router';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   register(rDto: RegisterDto): Observable<User> {
@@ -17,18 +18,21 @@ export class AuthService {
     return this.http.post<User>(url, rDto);
   }
 
-  authorise(username: string, password: string): Observable<AuthDto> {
+  authorise(usernameDto: string, passwordDto: string): Observable<TokenDto> {
     const url = `${environment.backendUrl}/api/v1/auth`;
-    console.log(username + ':' + password);
-    const head = new HttpHeaders({
-      Authorization: 'Basic ' + btoa(username + ':' + password)
-    });
-    return this.http.get<AuthDto>(url, {headers: head});
+    console.log(usernameDto + ':' + passwordDto);
+    return this.http.post<TokenDto>(url, {username: usernameDto, password: passwordDto});
   }
 
   authoriseEmpty(): Observable<AuthDto> {
     const url = `${environment.backendUrl}/api/v1/auth`;
+    console.log('sending empty auth', url);
     return this.http.get<AuthDto>(url);
+  }
+
+  logout(): void {
+    localStorage.clear();
+    this.router.navigate(['login']);
   }
 }
 
@@ -50,4 +54,8 @@ export class AuthDto {
   username: string;
   frogs: string;
   money: number;
+}
+
+export class TokenDto {
+  access_token: string;
 }

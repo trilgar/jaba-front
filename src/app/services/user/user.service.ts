@@ -17,6 +17,9 @@ export class UserService {
   constructor(private http: HttpClient) {
   }
 
+  getCurrentMoney(): number {
+    return parseInt(localStorage.getItem('money'), 10);
+  }
 
   changeMoney(money: number): void {
     localStorage.setItem('money', money.toString());

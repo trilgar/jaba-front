@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user/user.service';
 import {Router} from '@angular/router';
+import {AuthService} from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,7 @@ import {Router} from '@angular/router';
 export class NavbarComponent implements OnInit {
   money = -1;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private authService: AuthService) {
 
   }
 
@@ -26,5 +27,9 @@ export class NavbarComponent implements OnInit {
 
   goToFrogs(): void {
     this.router.navigate(['dashboard']);
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }
