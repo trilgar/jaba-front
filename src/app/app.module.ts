@@ -12,6 +12,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import {NavbarComponent} from './components/navbar/navbar.component';
 import {InterceptorService} from './services/interceptor/interceptor.service';
+import {ShopComponent} from './components/shop/shop.component';
+import {ErrorInterceptorService} from './services/interceptor/error-interceptor.service';
 
 
 @NgModule({
@@ -21,6 +23,7 @@ import {InterceptorService} from './services/interceptor/interceptor.service';
     LoginComponent,
     RegisterComponent,
     NavbarComponent,
+    ShopComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,8 @@ import {InterceptorService} from './services/interceptor/interceptor.service';
     CommonModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true}
   ],
   bootstrap: [AppComponent]
 })

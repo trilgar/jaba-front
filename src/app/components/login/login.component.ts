@@ -35,11 +35,16 @@ export class LoginComponent implements OnInit {
     const username = this.registerForm.get('username').value;
     const password = this.registerForm.get('password').value;
     this.authService.authorise(username, password)
-      .pipe(take(1)).subscribe(data => {
-      console.log('auth user:', data);
-      this.userService.changeMoney(data.money);
-      localStorage.setItem('userId', data.id.toString());
-      this.userService.userId = data.id;
+      .pipe(take(1)).subscribe(token => {
+      console.log('token:', token.access_token);
+      localStorage.setItem('token', token.access_token);
+      this.authService.authoriseEmpty().pipe(take(1))
+        .subscribe(userDto => {
+          this.userService.changeMoney(userDto.money);
+          localStorage.setItem('userId', userDto.id.toString());
+          localStorage.setItem('username', userDto.username);
+          this.userService.userId = userDto.id;
+        });
       console.log('Auth success');
       this.router.navigate(['dashboard']);
     }, error => {

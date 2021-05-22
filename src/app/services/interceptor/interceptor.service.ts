@@ -12,16 +12,14 @@ export class InterceptorService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const username = localStorage.getItem('username');
-    const password = localStorage.getItem('password');
-    const isLoggedIn = username != null && password != null;
+    const token = localStorage.getItem('token');
+    const isLoggedIn = token != null;
     const isApiUrl = req.url.startsWith(environment.backendUrl);
     if (isLoggedIn && isApiUrl) {
       req = req.clone({
-        setHeaders: {Authorization: 'Basic ' + btoa(username + ':' + password)}
+        setHeaders: {Authorization: 'Bearer ' + token}
       });
     }
-    console.log('intercepted:', req);
     return next.handle(req);
   }
 

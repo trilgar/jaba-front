@@ -2,11 +2,12 @@
 
 
 <div class="container">
+  <div class="text-warning" *ngIf="warningFlag">{{warningMessage}}</div>
   <div class="row">
 
     <div class="col-md-3 col-sm-6" *ngFor="let jaba of jaby">
       <div class="box">
-        <img src="https://frog-farm-api.herokuapp.com/api/v1/images/1" alt="jaba-image">
+        <img src="{{jaba.image}}" alt="jaba-image">
         <div class="box-content">
           <h5 class="title">{{jaba.name}}</h5>
           <h4 class="progress-title mr-1">Еда</h4>
@@ -26,18 +27,18 @@
           </div>
         </div>
         <ul class="icon">
-          <li><a (click)="feedFrog(jaba.id)" ><i class="fas fa-pizza-slice"></i></a></li>
+          <li><a (click)="feedFrog(jaba.id)"><i class="fas fa-pizza-slice"></i></a></li>
           <li><a (click)="washFrog(jaba.id)"><i class="fas fa-bath"></i></a></li>
           <li><a (click)="collectMoney(jaba.id)"><i class="fas fa-wallet"></i></a></li>
         </ul>
       </div>
     </div>
-    <div class="col-md-3 col-sm-6 cart-image">
-      <div class="box" (click)="goToShop()">
+    <div class="col-md-3 col-sm-6 cart-image" *ngIf="isFrogBuyAvailable()">
+      <div class="box" (click)="buyNewFrog()">
         <img src="https://cdn0.iconfinder.com/data/icons/e-commerce-ui-glyph/64/ecommerce_-_basket_full-512.png"
              alt="cart-image" class="img-fluid">
         <div class="box-content">
-          <h2 class="title">Магаз</h2>
+          <h2 class="title">Купить новую жэбу</h2>
         </div>
       </div>
 
