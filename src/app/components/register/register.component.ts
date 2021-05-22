@@ -88,4 +88,8 @@ export class RegisterComponent implements OnInit {
 
       });
   }
+
+  toLogin(): void {
+    this.router.navigate(['login']);
+  }
 }

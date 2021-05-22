@@ -41,13 +41,12 @@ export class LoginComponent implements OnInit {
       this.authService.authoriseEmpty().pipe(take(1))
         .subscribe(userDto => {
           this.userService.changeMoney(userDto.money);
-          console.log(userDto.id.toString())
           localStorage.setItem('userId', userDto.id.toString());
           localStorage.setItem('username', userDto.username);
+          this.userService.userId = userDto.id;
           console.log('Auth success');
           this.router.navigate(['dashboard']);
         });
-
     }, error => {
       console.log('error during auth: ', error);
       switch (error.status) {
@@ -85,5 +84,9 @@ export class LoginComponent implements OnInit {
       return {invalidPassword: 'Пароль не прошел валидацию'};
     }
     return null;
+  }
+
+  toRegister(): void {
+    this.router.navigate(['register']);
   }
 }
