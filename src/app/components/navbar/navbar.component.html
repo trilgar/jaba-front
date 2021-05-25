@@ -1,9 +1,30 @@
 <nav class=" bg-green fixed-top">
   <div class="row">
-    <div class="col ">
+    <div class="col position-relative flex-column">
       <form class="form-inline searchbar">
-        <input class="form-control" type="search" placeholder="  поиск..." aria-label="Search">
+        <div class="row">
+          <div class="col-12">
+            <input class="form-control" type="search" placeholder="  поиск..." aria-label="Search"
+                   (keyup)="searchTerm$.next($event.target.value)" #term>
+            <i class="fas fa-users ml-2 shine-white" (click)="users = []"></i>
+          </div>
+          <div class="col">
+            <ul *ngIf="users" class="search-result">
+              <li *ngFor="let user of users | slice:0:9">
+                <a (click)="userProfile(user.id)" target="_blank" class="text-wrap" >
+                  {{user.username}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+
       </form>
+
+
+
     </div>
     <div class="col">
       <h2 class="text-center">Ферма Нейрожэб</h2>

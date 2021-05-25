@@ -18,6 +18,12 @@ export class FrogService {
     return this.http.get<Frog[]>(url);
   }
 
+  getFrogsByUserId(userId: number): Observable<Frog[]> {
+    const url = `${environment.backendUrl}/api/v1/users/${userId}/frogs`;
+    console.log('sending get to :', url);
+    return this.http.get<Frog[]>(url);
+  }
+
   feedFrog(id: number): Observable<Frog> {
     const url = `${environment.backendUrl}/api/v1/frogs/${id}`;
     return this.http.put<Frog>(url, {action: 'feed'});

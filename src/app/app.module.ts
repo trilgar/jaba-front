@@ -14,6 +14,7 @@ import {NavbarComponent} from './components/navbar/navbar.component';
 import {InterceptorService} from './services/interceptor/interceptor.service';
 import {ShopComponent} from './components/shop/shop.component';
 import {ErrorInterceptorService} from './services/interceptor/error-interceptor.service';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import {ErrorInterceptorService} from './services/interceptor/error-interceptor.
     RegisterComponent,
     NavbarComponent,
     ShopComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule,
