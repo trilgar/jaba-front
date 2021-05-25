@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   searchTerm$ = new Subject<string>();
   users: User[] = [];
   @ViewChild('term') term;
-  dropDown = false;
+  dropDown = true;
 
   constructor(private userService: UserService, private router: Router, private authService: AuthService) {
 
@@ -46,7 +46,11 @@ export class NavbarComponent implements OnInit {
 
 
   userProfile(id: number): void {
+    console.log('redirecting', `users/${id}`);
     this.router.navigate([`users/${id}`]);
-    this.users = [];
+  }
+
+  getDropdownFalse(): void {
+    setTimeout(() => this.dropDown = false, 150);
   }
 }

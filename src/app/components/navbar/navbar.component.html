@@ -4,12 +4,12 @@
       <form class="form-inline searchbar">
         <div class="row">
           <div class="col-12">
-            <input class="form-control" type="search" placeholder="  поиск..." aria-label="Search"
+            <input class="form-control" (focus)="dropDown = true" (blur)="getDropdownFalse()" type="search" placeholder="  поиск..." aria-label="Search"
                    (keyup)="searchTerm$.next($event.target.value)" #term>
             <i class="fas fa-users ml-2 shine-white" (click)="users = []"></i>
           </div>
           <div class="col">
-            <ul *ngIf="users" class="search-result">
+            <ul *ngIf="users && dropDown" class="search-result">
               <li *ngFor="let user of users | slice:0:9">
                 <a (click)="userProfile(user.id)" target="_blank" class="text-wrap" >
                   {{user.username}}

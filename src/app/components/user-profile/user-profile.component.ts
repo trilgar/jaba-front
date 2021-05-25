@@ -15,7 +15,7 @@ export class UserProfileComponent implements OnInit {
   // todo money request
   money = 1000;
   user: User;
-  userJaby: Frog[];
+  userJaby: Frog[] = [];
   userId: number;
   warningFlag = false;
   warningMessage: string;

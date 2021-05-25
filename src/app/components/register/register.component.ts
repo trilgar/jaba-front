@@ -65,24 +65,13 @@ export class RegisterComponent implements OnInit {
       }, error => {
         console.log('error during registration occurred');
         console.log(error);
-        let unexpected = true;
-        if (error.error.message.password != null) {
-          this.errorMessage = error.error.message.password;
-          this.errorFlag = true;
-          unexpected = false;
-        }
-        if (error.error.message.email != null) {
-          this.errorMessage += error.error.message.email;
-          this.errorFlag = true;
-          unexpected = false;
-        }
         if (error.status === 500) {
           this.errorMessage = 'unexpected error. please,contact administrator.';
           this.errorFlag = true;
           return;
         }
-        if (unexpected === true) {
-          this.errorMessage = error.error.message;
+        else {
+          this.errorMessage = error;
           this.errorFlag = true;
         }
 
