@@ -17,22 +17,25 @@ export class FrogService {
   getAllFrogs(): Observable<any> {
     this.wsService.sendMessage(JSON.stringify({
       action: 'get',
-      resource: 'frogs'
+      resource: 'my_frogs'
     }));
     return this.wsService.currentMessage;
   }
 
-  getFrogsByUserId(userId: number): Observable<Frog[]> {
-    const url = `${environment.backendUrl}/api/v1/users/${userId}/frogs`;
-    console.log('sending get to :', url);
-    return this.http.get<Frog[]>(url);
+  getFrogsByUserId(userId: number): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'get',
+      resource: 'frogs',
+      user_id: userId
+    }));
+    return this.wsService.currentMessage;
   }
 
   feedFrog(idDto: number): Observable<any> {
     this.wsService.sendMessage(JSON.stringify({
       action: 'interact',
       subaction: 'feed',
-      id: idDto
+      frog_id: idDto
     }));
     return this.wsService.currentMessage;
   }
@@ -41,7 +44,7 @@ export class FrogService {
     this.wsService.sendMessage(JSON.stringify({
       action: 'interact',
       subaction: 'wash',
-      id: idDto
+      frog_id: idDto
     }));
     return this.wsService.currentMessage;
   }
@@ -50,7 +53,7 @@ export class FrogService {
     this.wsService.sendMessage(JSON.stringify({
       action: 'interact',
       subaction: 'collect',
-      id: idDto
+      frog_id: idDto
     }));
     return this.wsService.currentMessage;
   }

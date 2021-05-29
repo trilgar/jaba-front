@@ -45,7 +45,6 @@ export class MainPageComponent implements OnInit {
 
   refreshFrogs(): void {
     this.frogService.getAllFrogs().pipe(take(1)).subscribe(data => {
-      console.log('data of frogs:', data.data);
       const frogsDto: Frog[] = JSON.parse(data.data).payload;
       this.jaby = frogsDto.map(jaba => {
         jaba.image = this.getFullImageLink(jaba.image);

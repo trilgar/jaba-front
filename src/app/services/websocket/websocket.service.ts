@@ -22,7 +22,6 @@ export class WebsocketService {
   constructor() {
     this.connect();
     this.ws.onmessage = (data: MessageEvent) => {
-      console.log('skip one: ', this.skipOne);
       if (!this.skipOne) {
         this.messageSource.next(data);
         this.openedStatus = true;

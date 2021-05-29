@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {User} from '../auth/auth.service';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import {WebsocketService} from '../websocket/websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class UserService {
   private messageSource = new BehaviorSubject(this.editDataDetails);
   currentMessage = this.messageSource.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private wsService: WebsocketService) {
   }
 
   getCurrentMoney(): number {
@@ -36,18 +37,20 @@ export class UserService {
     this._userId = value;
   }
 
-  getUser(id: number): Observable<User> {
-    const url = `${environment.backendUrl}/api/v1/users/${id}`;
-    return this.http.get<User>(url);
+  getUser(id: number): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+        action: 'get',
+        resource: 'user',
+        user_id: id
+      }
+    ));
+    return this.wsService.currentMessage;
   }
 
   getUsersByName(name: string): Observable<User[]> {
     // todo implement real search by name
-    const user1: User = {id: 1, username: 'username1', frogs: '/api/v1/users/1/frogs'};
-    const user2: User = {id: 2, username: 'username2', frogs: '/api/v1/users/1/frogs'};
-    const user3: User = {id: 3, username: 'username3', frogs: '/api/v1/users/1/frogs'};
-    const user4: User = {id: 4, username: 'username4', frogs: '/api/v1/users/1/frogs'};
-    return of([user1, user2, user3, user4]);
+    const url = `${environment.backendUrl}/api/v1/users?username=${name}`;
+    return this.http.get<User[]>(url);
   }
 
   search(terms: Subject<string>): Observable<User[]> {

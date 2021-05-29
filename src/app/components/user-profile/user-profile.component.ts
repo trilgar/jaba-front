@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {User} from '../../services/auth/auth.service';
+import {UserDto} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
 import {take} from 'rxjs/operators';
 import {Frog, FrogService} from '../../services/frog/frog.service';
@@ -12,9 +12,7 @@ import {environment} from '../../../environments/environment';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  // todo money request
-  money = 1000;
-  user: User;
+  user: UserDto;
   userJaby: Frog[] = [];
   userId: number;
   warningFlag = false;
@@ -26,15 +24,20 @@ export class UserProfileComponent implements OnInit {
   ngOnInit(): void {
     this.userId = +this.route.snapshot.paramMap.get('id');
     this.userService.getUser(this.userId).pipe(take(1))
-      .subscribe(user => this.user = user);
-    this.refreshFrogs();
+      .subscribe(responce => {
+        this.user = JSON.parse(responce.data).payload;
+        this.refreshFrogs();
+      });
   }
 
   refreshFrogs(): void {
-    this.frogService.getFrogsByUserId(this.userId).pipe(take(1)).subscribe(frogs => this.userJaby = frogs.map(jaba => {
-      jaba.image = this.getFullImageLink(jaba.image);
-      return jaba;
-    }));
+    this.frogService.getFrogsByUserId(this.userId).pipe(take(1)).subscribe(data => {
+      const frogsDto: Frog[] = JSON.parse(data.data).payload;
+      this.userJaby = frogsDto.map(jaba => {
+        jaba.image = this.getFullImageLink(jaba.image);
+        return jaba;
+      });
+    });
   }
 
   calculateProgressStyle(percent: number, color: string): string {
