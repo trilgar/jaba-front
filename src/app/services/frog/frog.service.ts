@@ -3,19 +3,23 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {UserService} from '../user/user.service';
+import {WebsocketService} from '../websocket/websocket.service';
+import {WsMessageType} from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FrogService {
 
-  constructor(private http: HttpClient, private userService: UserService) {
+  constructor(private http: HttpClient, private userService: UserService, private wsService: WebsocketService) {
   }
 
-  getAllFrogs(): Observable<Frog[]> {
-    const url = `${environment.backendUrl}/api/v1/users/${parseInt(localStorage.getItem('userId'), 10)}/frogs`;
-    console.log('sending get to :', url);
-    return this.http.get<Frog[]>(url);
+  getAllFrogs(): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'get',
+      resource: 'frogs'
+    }));
+    return this.wsService.currentMessage;
   }
 
   getFrogsByUserId(userId: number): Observable<Frog[]> {
@@ -24,19 +28,31 @@ export class FrogService {
     return this.http.get<Frog[]>(url);
   }
 
-  feedFrog(id: number): Observable<Frog> {
-    const url = `${environment.backendUrl}/api/v1/frogs/${id}`;
-    return this.http.put<Frog>(url, {action: 'feed'});
+  feedFrog(idDto: number): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'interact',
+      subaction: 'feed',
+      id: idDto
+    }));
+    return this.wsService.currentMessage;
   }
 
-  washFrog(id: number): Observable<Frog> {
-    const url = `${environment.backendUrl}/api/v1/frogs/${id}`;
-    return this.http.put<Frog>(url, {action: 'wash'});
+  washFrog(idDto: number): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'interact',
+      subaction: 'wash',
+      id: idDto
+    }));
+    return this.wsService.currentMessage;
   }
 
-  collectMoney(id: number): Observable<Frog> {
-    const url = `${environment.backendUrl}/api/v1/frogs/${id}`;
-    return this.http.put<Frog>(url, {action: 'collect'});
+  collectMoney(idDto: number): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'interact',
+      subaction: 'collect',
+      id: idDto
+    }));
+    return this.wsService.currentMessage;
   }
 
   frogById(id: number): Observable<Frog> {
@@ -44,10 +60,11 @@ export class FrogService {
     return this.http.get<Frog>(url);
   }
 
-  buyFrog(): Observable<Frog> {
-    const url = `${environment.backendUrl}/api/v1/users/${parseInt(localStorage.getItem('userId'), 10)}/frogs`;
-    console.log('sending post to :', url);
-    return this.http.post<Frog>(url, null);
+  buyFrog(): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'buy'
+    }));
+    return this.wsService.currentMessage;
   }
 }
 
@@ -59,4 +76,18 @@ export class Frog {
   money: number;
   cleanliness: number;
   image: string;
+  level: number;
+}
+
+
+export class WSHttpPackage {
+  authorization: string;  // это токен
+  action: string;
+  payload: any; // body запроса
+}
+
+export class FrogsResponce {
+  type: WsMessageType;
+  content_type: string;
+  payload: Frog[];
 }

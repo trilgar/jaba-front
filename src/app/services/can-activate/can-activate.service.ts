@@ -13,7 +13,7 @@ export class CanActivateService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> |
     Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (localStorage.getItem('token') === null) {
+    if (localStorage.getItem('username') === null || localStorage.getItem('password') === null) {
       this.userService.changeMoney(-1);
       return this.router.createUrlTree(['login']);
     }

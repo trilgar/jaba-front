@@ -3,13 +3,14 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {Router} from '@angular/router';
+import {WebsocketService} from '../websocket/websocket.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private wsService: WebsocketService) {
   }
 
   register(rDto: RegisterDto): Observable<User> {
@@ -18,16 +19,17 @@ export class AuthService {
     return this.http.post<User>(url, rDto);
   }
 
-  authorise(usernameDto: string, passwordDto: string): Observable<TokenDto> {
-    const url = `${environment.backendUrl}/api/v1/auth`;
-    console.log(usernameDto + ':' + passwordDto);
-    return this.http.post<TokenDto>(url, {username: usernameDto, password: passwordDto});
+  authorise(usernameDto: string, passwordDto: string): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({action: 'authorization', username: usernameDto, password: passwordDto}));
+    return this.wsService.currentMessage;
   }
 
-  authoriseEmpty(): Observable<AuthDto> {
-    const url = `${environment.backendUrl}/api/v1/auth`;
-    console.log('sending empty auth', url);
-    return this.http.get<AuthDto>(url);
+  authoriseEmpty(): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+      action: 'get',
+      resource: 'me'
+    }));
+    return this.wsService.currentMessage;
   }
 
   logout(): void {
@@ -58,4 +60,19 @@ export class AuthDto {
 
 export class TokenDto {
   access_token: string;
+}
+
+export enum WsMessageType {
+  ERROR = 'error',
+  INFO = 'info',
+  CONTENT = 'content'
+}
+
+export class UserDto {
+  id: number;
+  username: string;
+  money: number;
+  total_money_collected: number;
+  total_food_spent: number;
+  total_water_spent: number;
 }

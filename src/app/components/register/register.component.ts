@@ -69,8 +69,7 @@ export class RegisterComponent implements OnInit {
           this.errorMessage = 'unexpected error. please,contact administrator.';
           this.errorFlag = true;
           return;
-        }
-        else {
+        } else {
           this.errorMessage = error;
           this.errorFlag = true;
         }

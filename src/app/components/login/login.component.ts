@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {AuthService} from '../../services/auth/auth.service';
+import {AuthService, WsMessageType} from '../../services/auth/auth.service';
 import {take} from 'rxjs/operators';
 import {UserService} from '../../services/user/user.service';
 import {FormBuilder, FormControl, ValidationErrors, Validators} from '@angular/forms';
@@ -35,34 +35,21 @@ export class LoginComponent implements OnInit {
     const username = this.registerForm.get('username').value;
     const password = this.registerForm.get('password').value;
     this.authService.authorise(username, password)
-      .pipe(take(1)).subscribe(token => {
-      console.log('token:', token.access_token);
-      localStorage.setItem('token', token.access_token);
-      this.authService.authoriseEmpty().pipe(take(1))
-        .subscribe(userDto => {
-          this.userService.changeMoney(userDto.money);
-          localStorage.setItem('userId', userDto.id.toString());
-          localStorage.setItem('username', userDto.username);
-          this.userService.userId = userDto.id;
-          console.log('Auth success');
-          this.router.navigate(['dashboard']);
-        });
-    }, error => {
-      console.log('error during auth: ', error);
-      switch (error.status) {
-        case 401: {
-          this.warningMessage = 'login or password is incorrect';
-          this.warningFlag = true;
-          break;
-        }
-        default: {
-          this.warningMessage = error;
-          this.warningFlag = true;
-          break;
-        }
+      .pipe(take(1)).subscribe(msg => {
+      const data = JSON.parse(msg.data);
+      console.log('received after auth data: ', data);
+      console.log('data type::', data.type);
+      if (data.type === WsMessageType.ERROR) {
+        console.log('error during auth: ', data.message);
+        this.warningMessage = data.message;
+        this.warningFlag = true;
+      } else {
+        localStorage.setItem('username', username);
+        localStorage.setItem('password', password);
 
+        console.log(localStorage.getItem('username'), localStorage.getItem('password'));
+        this.router.navigate(['dashboard']);
       }
-
     });
   }
 
