@@ -47,7 +47,7 @@ export class UserProfileComponent implements OnInit {
     return 'width:' + percent.toString() + '%; background:' + color;
   }
 
-  private getFullImageLink(shortened: string): string {
+  getFullImageLink(shortened: string): string {
     return environment.backendUrl + shortened;
   }
 

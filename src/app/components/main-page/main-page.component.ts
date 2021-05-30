@@ -5,7 +5,6 @@ import {take} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
 import {AuthService, UserDto, WsMessageType} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
-import {WebsocketService} from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-main-page',
@@ -19,7 +18,7 @@ export class MainPageComponent implements OnInit {
 
 
   constructor(private router: Router, private frogService: FrogService,
-              private authService: AuthService, private userService: UserService, private wsService: WebsocketService) {
+              private authService: AuthService, private userService: UserService) {
   }
 
   ngOnInit(): void {
