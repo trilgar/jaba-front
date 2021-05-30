@@ -56,3 +56,7 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.vertical-align {
+  margin-top: 15px;
+}

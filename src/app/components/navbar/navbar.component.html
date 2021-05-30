@@ -6,7 +6,7 @@
           <div class="col-12">
             <input class="form-control" (focus)="dropDown = true" (blur)="getDropdownFalse()" type="search" placeholder="  поиск профилей..." aria-label="Search"
                    (keyup)="searchTerm$.next($event.target.value)" #term>
-            <i class="fas fa-users ml-2 shine-white" (click)="toMyProfile()" id="btn-tooltip"  title="мой профиль"></i>
+            <i class="fas fa-users ml-2 shine-white" (click)="toMyProfile()" *ngIf="userIdExists()" id="btn-tooltip"  title="мой профиль"></i>
           </div>
           <div class="col">
             <ul *ngIf="users && dropDown" class="search-result">
@@ -42,6 +42,11 @@
             </div>
             <div class=" col-md-3 col-sm-6 mr-2 shine-white" (click)="logout()" id="btn-logout" title="выйти из аккаунта">
               <i class="fas fa-sign-out-alt"></i>
+            </div>
+          </div>
+          <div class="row  justify-content-end vertical-align" *ngIf="!(money>0)">
+            <div class="col-md-4  col-sm-6 shine-text" (click)="goToFrogs()" >
+              Log In
             </div>
           </div>
         </div>

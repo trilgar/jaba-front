@@ -59,4 +59,8 @@ export class NavbarComponent implements OnInit {
     console.log('redirecting', `users/${id}`);
     this.router.navigate([`users/${id}`]);
   }
+
+  userIdExists(): boolean {
+    return localStorage.getItem('userId') !== null;
+  }
 }
