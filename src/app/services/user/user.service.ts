@@ -3,6 +3,8 @@ import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {User} from '../auth/auth.service';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
+import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators';
+import {WebsocketService} from '../websocket/websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class UserService {
   private messageSource = new BehaviorSubject(this.editDataDetails);
   currentMessage = this.messageSource.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private wsService: WebsocketService) {
   }
 
   getCurrentMoney(): number {
@@ -35,8 +37,26 @@ export class UserService {
     this._userId = value;
   }
 
-  getUser(id: number): Observable<User> {
-    const url = `${environment.backendUrl}/api/v1/users/${id}`;
-    return this.http.get<User>(url);
+  getUser(id: number): Observable<any> {
+    this.wsService.sendMessage(JSON.stringify({
+        action: 'get',
+        resource: 'user',
+        user_id: id
+      }
+    ));
+    return this.wsService.currentMessage;
+  }
+
+  getUsersByName(name: string): Observable<User[]> {
+    // todo implement real search by name
+    const url = `${environment.backendUrl}/api/v1/users?username=${name}`;
+    return this.http.get<User[]>(url);
+  }
+
+  search(terms: Subject<string>): Observable<User[]> {
+    return terms.pipe(
+      debounceTime(150),
+      distinctUntilChanged(),
+      switchMap(term => this.getUsersByName(term)));
   }
 }

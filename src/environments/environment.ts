@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://frog-farm-api.herokuapp.com'
+  backendUrl: 'https://frog-farm-api.herokuapp.com',
+  websocketUrl: 'ws://frog-farm-api.herokuapp.com/api/v1/gameplay'
 };
 
 /*

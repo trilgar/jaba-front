@@ -1,9 +1,30 @@
 <nav class=" bg-green fixed-top">
-  <div class="row">
-    <div class="col ">
+  <div class="row ">
+    <div class="col position-relative flex-column">
       <form class="form-inline searchbar">
-        <input class="form-control" type="search" placeholder="  поиск..." aria-label="Search">
+        <div class="row">
+          <div class="col-12">
+            <input class="form-control" (focus)="dropDown = true" (blur)="getDropdownFalse()" type="search" placeholder="  поиск профилей..." aria-label="Search"
+                   (keyup)="searchTerm$.next($event.target.value)" #term>
+            <i class="fas fa-users ml-2 shine-white" (click)="toMyProfile()" id="btn-tooltip"  title="мой профиль"></i>
+          </div>
+          <div class="col">
+            <ul *ngIf="users && dropDown" class="search-result">
+              <li *ngFor="let user of users | slice:0:9">
+                <a (click)="userProfile(user.id)" target="_blank" class="text-wrap" >
+                  {{user.username}}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+
       </form>
+
+
+
     </div>
     <div class="col">
       <h2 class="text-center">Ферма Нейрожэб</h2>
@@ -12,14 +33,14 @@
       <div class="row mt-2">
         <div class="col"></div>
         <div class="col">
-          <div class="row mt-4" *ngIf="money>0">
+          <div class="row mt-2" *ngIf="money>0">
             <div class="col-md-4  col-sm-6 shine-text" (click)="goToFrogs()">
               Мои жэбы
             </div>
             <div class=" col-md-3 col-sm-6">
               <span class="text-warning">{{money}} <i class="fas fa-coins"></i></span>
             </div>
-            <div class=" col-md-3 col-sm-6 mr-2 shine-white" (click)="logout()">
+            <div class=" col-md-3 col-sm-6 mr-2 shine-white" (click)="logout()" id="btn-logout" title="выйти из аккаунта">
               <i class="fas fa-sign-out-alt"></i>
             </div>
           </div>
@@ -30,3 +51,10 @@
   </div>
 
 </nav>
+
+<script>
+  $('#btn-tooltip').tooltip();
+</script>
+<script>
+  $('#btn-logout').tooltip();
+</script>

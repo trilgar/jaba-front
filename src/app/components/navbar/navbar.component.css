@@ -1,13 +1,50 @@
 .searchbar {
   margin-left: 20px !important;
-  max-height: 10px !important;
-  max-width: 20% !important;
+  max-width: 100% !important;
   margin-top: 15px !important;
   margin-bottom: 5px !important;
   border-radius: 0 !important;
+  min-width: 20% !important;
 }
 
 .shine-white:hover {
   color: #ff3907;
   transition-duration: 1s;
+}
+ul.search-result {
+  position: absolute;
+  margin-top: 0;
+  padding-left: 0;
+  min-width: 70% !important;
+}
+.search-result li {
+  border-radius: 3px;
+  height: 30px;
+  padding: 5px;
+  background-color: white;
+  cursor: pointer;
+  list-style-type: none;
+}
+
+
+.search-result li:hover {
+  background-color: green;
+}
+
+.search-result li a {
+  color: black;
+  display: block;
+  text-decoration: none;
+}
+
+.search-result li a:hover {
+  color: white;
+}
+
+.search-result li a:active {
+  color: white;
+}
+
+.min-width-20 {
+  min-width: 100% !important;
 }

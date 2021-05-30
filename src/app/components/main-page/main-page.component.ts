@@ -3,8 +3,9 @@ import {Frog, FrogService} from '../../services/frog/frog.service';
 import {Router} from '@angular/router';
 import {take} from 'rxjs/operators';
 import {environment} from '../../../environments/environment';
-import {AuthService} from '../../services/auth/auth.service';
+import {AuthService, UserDto, WsMessageType} from '../../services/auth/auth.service';
 import {UserService} from '../../services/user/user.service';
+import {WebsocketService} from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-main-page',
@@ -18,12 +19,24 @@ export class MainPageComponent implements OnInit {
 
 
   constructor(private router: Router, private frogService: FrogService,
-              private authService: AuthService, private userService: UserService) {
+              private authService: AuthService, private userService: UserService, private wsService: WebsocketService) {
   }
 
   ngOnInit(): void {
-    this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.userService.changeMoney(user.money));
-    this.refreshFrogs();
+    this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => {
+      console.log('user', user);
+      const payload: UserDto = JSON.parse(user.data).payload;
+      console.log('payload', payload);
+      this.userService.changeMoney(payload.money);
+      localStorage.setItem('userId', payload.id.toString());
+      this.refreshFrogs();
+    });
+
+  }
+
+  private changeMoney(user: any): void {
+    const payload: UserDto = JSON.parse(user.data).payload;
+    this.userService.changeMoney(payload.money);
   }
 
   private getFullImageLink(shortened: string): string {
@@ -31,10 +44,13 @@ export class MainPageComponent implements OnInit {
   }
 
   refreshFrogs(): void {
-    this.frogService.getAllFrogs().pipe(take(1)).subscribe(data => this.jaby = data.map(jaba => {
-      jaba.image = this.getFullImageLink(jaba.image);
-      return jaba;
-    }));
+    this.frogService.getAllFrogs().pipe(take(1)).subscribe(data => {
+      const frogsDto: Frog[] = JSON.parse(data.data).payload;
+      this.jaby = frogsDto.map(jaba => {
+        jaba.image = this.getFullImageLink(jaba.image);
+        return jaba;
+      });
+    });
   }
 
   calculateProgressStyle(percent: number, color: string): string {
@@ -49,9 +65,11 @@ export class MainPageComponent implements OnInit {
     if (this.findFrogById(id).food === 100) {
       return;
     }
-    this.frogService.feedFrog(id).pipe(take(1)).subscribe(frog => {
+    this.frogService.feedFrog(id).pipe(take(1)).subscribe(responce => {
+      const frog: Frog = JSON.parse(responce.data).payload;
       this.findFrogById(id).food = frog.food;
       this.findFrogById(id).cleanliness = frog.cleanliness;
+      this.findFrogById(id).money = frog.money;
     });
   }
 
@@ -59,9 +77,12 @@ export class MainPageComponent implements OnInit {
     if (this.findFrogById(id).money === 0) {
       return;
     }
-    this.frogService.collectMoney(id).pipe(take(1)).subscribe(frog => {
-      this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.userService.changeMoney(user.money));
-      this.findFrogById(id).money = 0;
+    this.frogService.collectMoney(id).pipe(take(1)).subscribe(responce => {
+      const frog: Frog = JSON.parse(responce.data).payload;
+      this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.changeMoney(user));
+      this.findFrogById(id).food = frog.food;
+      this.findFrogById(id).cleanliness = frog.cleanliness;
+      this.findFrogById(id).money = frog.money;
     });
   }
 
@@ -69,9 +90,11 @@ export class MainPageComponent implements OnInit {
     if (this.findFrogById(id).cleanliness === 100) {
       return;
     }
-    this.frogService.washFrog(id).pipe(take(1)).subscribe(frog => {
+    this.frogService.washFrog(id).pipe(take(1)).subscribe(responce => {
+      const frog: Frog = JSON.parse(responce.data).payload;
       this.findFrogById(id).food = frog.food;
       this.findFrogById(id).cleanliness = frog.cleanliness;
+      this.findFrogById(id).money = frog.money;
     });
   }
 
@@ -80,17 +103,18 @@ export class MainPageComponent implements OnInit {
   }
 
   buyNewFrog(): void {
-    this.frogService.buyFrog().pipe(take(1)).subscribe(newFrog => {
+    this.frogService.buyFrog().pipe(take(1)).subscribe(responce => {
+      const data = JSON.parse(responce.data);
+      if (data.type === WsMessageType.ERROR) {
+        this.warningMessage = data.message;
+        this.warningFlag = true;
+      }
+      const newFrog = data.payload;
       this.jaby.push(newFrog);
       newFrog.image = this.getFullImageLink(newFrog.image);
       console.log('new frog bought:', newFrog);
-      this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.userService.changeMoney(user.money));
+      this.authService.authoriseEmpty().pipe(take(1)).subscribe(user => this.changeMoney(user));
       const timeStamp = (new Date()).getTime();
-    }, error => {
-      console.log('error during jaba buying:', error);
-      this.warningMessage = error.error.message;
-      this.warningFlag = true;
-      setTimeout(() => this.warningFlag = false, 2500);
     });
   }
 

@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"/>
-
 
 <div class="container">
   <div class="text-warning" *ngIf="warningFlag">{{warningMessage}}</div>
@@ -36,7 +34,7 @@
     <div class="col-md-3 col-sm-6 cart-image" *ngIf="isFrogBuyAvailable()">
       <div class="box" (click)="buyNewFrog()">
         <img src="https://cdn0.iconfinder.com/data/icons/e-commerce-ui-glyph/64/ecommerce_-_basket_full-512.png"
-             alt="cart-image" class="img-fluid">
+             alt="cart-image" class="img-fluid bg-white" >
         <div class="box-content">
           <h2 class="title">Купить новую жэбу</h2>
         </div>
