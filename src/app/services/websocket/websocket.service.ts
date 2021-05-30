@@ -31,30 +31,28 @@ export class WebsocketService {
     };
 
     this.ws.onclose = () => {
-      this.openedStatus = false;
+      console.log('ONCLOSE');
+      this.connect();
+      this.ws.onmessage = (data: MessageEvent) => {
+        if (!this.skipOne) {
+          this.messageSource.next(data);
+          this.openedStatus = true;
+        } else {
+          this.skipOne = false;
+        }
+      };
     };
     localStorage.setItem('refresh', 'used');
     this.source.subscribe(() => this.sendMessage('PING'));
-    /*this.ws.onclose = (e) => {
-      console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-      setTimeout(() => {
-        this.connect();
-        this.ws.onopen = () => {
-          this.sendMessage(JSON.stringify({
-            action: 'authorization',
-            username: localStorage.getItem('username'),
-            password: localStorage.getItem('password')
-          }));
-        };
-      }, 1000);
-    };*/
   }
+
 
 
   public connect(): void {
     this.ws = new WebSocket(environment.websocketUrl);
-
-    if (localStorage.getItem('refresh') === 'used') {
+    console.log('localstorage check:', localStorage.getItem('username'), localStorage.getItem('password'));
+    if (localStorage.getItem('refresh') === 'used' && localStorage.getItem('username') !== null
+      && localStorage.getItem('password') != null) {
       this.skipOne = true;
       this.sendMessage(JSON.stringify({
         action: 'authorization',

@@ -34,6 +34,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.clear();
+    this.wsService.close();
     this.router.navigate(['login']);
   }
 }

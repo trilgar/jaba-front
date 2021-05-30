@@ -22,12 +22,15 @@ export class UserProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userId = +this.route.snapshot.paramMap.get('id');
-    this.userService.getUser(this.userId).pipe(take(1))
-      .subscribe(responce => {
-        this.user = JSON.parse(responce.data).payload;
-        this.refreshFrogs();
-      });
+    this.route.params.subscribe(params => {
+      this.userId = +this.route.snapshot.paramMap.get('id');
+      this.userService.getUser(this.userId).pipe(take(1))
+        .subscribe(responce => {
+          this.user = JSON.parse(responce.data).payload;
+          this.refreshFrogs();
+        });
+    });
+
   }
 
   refreshFrogs(): void {
