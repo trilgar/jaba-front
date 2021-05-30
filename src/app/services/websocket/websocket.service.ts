@@ -20,6 +20,12 @@ export class WebsocketService {
 
 
   constructor() {
+    this.initConnection();
+    localStorage.setItem('refresh', 'used');
+    this.source.subscribe(() => this.sendMessage('PING'));
+  }
+
+  initConnection(): void {
     this.connect();
     this.ws.onmessage = (data: MessageEvent) => {
       if (!this.skipOne) {
@@ -33,19 +39,9 @@ export class WebsocketService {
     this.ws.onclose = () => {
       console.log('ONCLOSE');
       this.connect();
-      this.ws.onmessage = (data: MessageEvent) => {
-        if (!this.skipOne) {
-          this.messageSource.next(data);
-          this.openedStatus = true;
-        } else {
-          this.skipOne = false;
-        }
-      };
+      this.initConnection();
     };
-    localStorage.setItem('refresh', 'used');
-    this.source.subscribe(() => this.sendMessage('PING'));
   }
-
 
 
   public connect(): void {

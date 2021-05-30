@@ -53,4 +53,10 @@ export class NavbarComponent implements OnInit {
   getDropdownFalse(): void {
     setTimeout(() => this.dropDown = false, 150);
   }
+
+  toMyProfile(): void {
+    const id = localStorage.getItem('userId');
+    console.log('redirecting', `users/${id}`);
+    this.router.navigate([`users/${id}`]);
+  }
 }
